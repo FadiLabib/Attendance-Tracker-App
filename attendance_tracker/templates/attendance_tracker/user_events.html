@@ -1,0 +1,127 @@
+{% extends "attendance_tracker/loggedin_base.html" %}
+{% load static %}
+{% block content %}
+	<div class="table-responsive">
+		<h1 class="border-bottom mb-4">{{ current_user.first_name }} {{ current_user.last_name }} Events</h1>
+		<div class="d-flex justify-content-between">
+			<div><h4>{{ view.kwargs.email }}</h4></div>
+			<div>
+				<h4>
+					<a id="clrfilter" class="btn btn-info" role="button" aria-pressed="true" href="{% url 's-events-by-user' view.kwargs.email %}"><i class="fa fa-refresh" aria-hidden="true"></i>&nbsp; Reset to Default</a>
+					<a class="btn btn-info" role="button" aria-pressed="true" href="{% url 's-event-list' %}"><i class="fa fa-caret-square-o-left" aria-hidden="true"></i>&nbsp; Back</a>
+				</h4>
+			</div>
+		</div>
+		<br>
+		<table id = "usereventview" class="table table-bordered table-light dt-responsive nowrap" style="width:100%;">
+			<thead>
+				<tr>
+					<th scope="col" style="text-align: center;">Edit</th>
+					<th scope="col" style="text-align: center;">Delete</th>
+					<th scope="col">#</th>
+					<th scope="col">Event Date</th>
+					<th scope="col">Type</th>
+					<th scope="col">Time</th>
+					<th scope="col">Day</th>
+					<th scope="col" style="text-align: center;">Attendance</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for event in events %}
+					<tr>
+						{% if user.is_ultimate or user == event.user or user in event.assignees.all %}
+							<td style="text-align: center; vertical-align: middle;"><a class="btn btn-info btn-sm" role="button" aria-pressed="true" href="{% url 's-event-update' event.event_id %}"><i class="fa fa-pencil-square" aria-hidden="true"></i></a></td>
+						{% else %}
+							<td style="text-align: center; vertical-align: middle;"><a class="btn btn-secondary btn-sm disabled" role="button" aria-pressed="true" href="#"><i class="fa fa-pencil-square" aria-hidden="true"></i></a></td>
+						{% endif %}
+						{% if user.is_ultimate or user == event.user or user in event.assignees.all %}
+							<td style="text-align: center; vertical-align: middle;"><a class="btn btn-danger btn-sm" role="button" aria-pressed="true" href="{% url 's-event-delete' event.event_id %}"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+						{% else %}
+							<td style="text-align: center; vertical-align: middle;"><a class="btn btn-secondary btn-sm disabled" role="button" aria-pressed="true" href="#"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+						{% endif %}
+						<td scope="row">{{ forloop.counter }}</td>
+						<td scope="row">{{ event.event_date|date:"Y/m/d" }}</td>
+						<td scope="row">{{ event.event_type }}</td>
+						<td scope="row">{{ event.event_sect }}</td>
+						<td scope="row">{{ event.event_day }}</td>
+						{% if user.is_ultimate or user == event.user or user in event.assignees.all %}
+							<td scope="row" style="text-align: center; vertical-align: middle;">
+								<a class="btn btn-success btn-sm" role="button" aria-pressed="true" href="{% url 's-take-attendance' event.event_id %}">Take</a>
+								&nbsp;
+								<a class="btn btn-info btn-sm" role="button" aria-pressed="true" href="{% url 's-event-view' event.event_id %}"><i class="fa fa-eye" aria-hidden="true"></i></a>
+							</td>
+						{% else %}
+							<td scope="row" style="text-align: center; vertical-align: middle;">
+								<a class="btn btn-secondary btn-sm disabled" role="button" aria-pressed="true" href="#">Take</a>
+								&nbsp;
+								<a class="btn btn-info btn-sm" role="button" aria-pressed="true" href="{% url 's-event-view' event.event_id %}"><i class="fa fa-eye" aria-hidden="true"></i></a>
+							</td>
+						{% endif %}
+					</tr>
+				{% endfor %}
+			</tbody>
+			<tfoot>
+				<tr>
+					<th scope="col" style="text-align: center;">Edit</th>
+					<th scope="col" style="text-align: center;">Delete</th>
+					<th scope="col" style="text-align: center;">#</th>
+					<th scope="col" style="text-align: center;">Event Date</th>
+					<th scope="col" style="text-align: center;">Day</th>
+					<th scope="col" style="text-align: center;">Time</th>
+					<th scope="col" style="text-align: center;">Type</th>
+					<th scope="col" style="text-align: center;">Attendance</th>
+				</tr>
+			</tfoot>
+		</table>
+	</div>
+{% endblock content %}
+{% block scripts %}
+<script>
+$(document).ready(function() {
+
+	// Setup - add a text input to each footer cell
+    $('#usereventview tfoot th').not(":eq(0),:eq(1),:eq(2),:eq(7)") //Exclude columns 1, 2, 3, and 6
+                          .each( function () {
+        var title = $('#usereventview thead th').eq( $(this).index() ).text();
+        $(this).html( '<div class="input-group"><span class="input-group-addon"></span><input type="text" id="textboxsize" placeholder="Filter by '+title+'" /></div>' );
+    } );
+
+	var table = $('#usereventview').DataTable({
+		stateSave: true,
+		lengthChange: true,
+		fixedHeader: true,
+		buttons: [ 'copy', 'excel', 'csv', 'pdf','print', 'colvis' ],
+		pagingType: 'full_numbers',
+		lengthMenu: [[5, 10, 25, 50, 100, -1], [5, 10, 25, 50, 100, "All"]],
+		pageLength: 10,
+		columnDefs: [
+    		{ 'orderable': false, 'targets': 0 },
+    		{ 'orderable': false, 'targets': 1 },
+    		{ 'orderable': false, 'targets': 7 },
+  		],
+  		//changing default of ordering on column 0 to order on column 2
+  		order: [[2, 'asc']]
+	});
+
+	table.buttons().container()
+		.appendTo( '#usereventview_wrapper .col-md-6:eq(0)' );
+
+	// Apply the search
+    table.columns().eq( 0 ).each( function ( colIdx ) {
+        if (colIdx == 0 || colIdx == 1 || colIdx == 2 || colIdx == 7) return; //Do not add event handlers for these columns
+
+        $( 'input', table.column( colIdx ).footer() ).on( 'keyup change', function () {
+            table
+                .column( colIdx )
+                .search( this.value )
+                .draw();
+        });
+    });
+
+    //Gives user the option to clear all fitlers
+    $('#clrfilter').on('click', function(){
+  		$('#usereventview').DataTable().state.clear();
+	});
+});
+</script>
+{% endblock scripts %}

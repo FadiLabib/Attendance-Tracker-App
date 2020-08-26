@@ -1,0 +1,186 @@
+/*!
+ * Start Bootstrap - Modern Business (https://startbootstrap.com/templates/modern-business)
+ * Copyright 2013-2020 Start Bootstrap
+ * Licensed under MIT (https://github.com/StartBootstrap/startbootstrap-logomodern-business-nav/blob/master/LICENSE)
+ */
+body {
+  padding-top: 56px;
+}
+
+.carousel-item {
+  height: 65vh;
+  min-height: 300px;
+  background: no-repeat center center scroll;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+.portfolio-item {
+  margin-bottom: 30px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family:Lato,'Helvetica Neue',Helvetica,Arial,sans-serif;
+  font-weight:700;
+  color:#2b2a2a;
+}
+
+ul {
+  margin: 0;
+}
+
+th {
+  background-color: #03396c;
+  color: #b3cde0;
+  font-size: 10pt;
+}
+
+tr {
+  background-color: #b6bddb;
+  color: #000000;
+  font-weight:700;
+  font-size: 10pt;
+}
+
+tr:nth-child(even) {
+  background-color: #67809d;
+  color: #000000;
+  font-weight:700;
+  font-size: 10pt;
+}
+
+tr:hover {
+  background-color: #cea949;
+  color: #000000;
+  font-weight:700
+}
+
+#textboxsize {
+  display: inline;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+#rowFooterTitle { 
+  font-weight: bold;
+  background-color: #03396c;
+  color: #b3cde0;
+}
+
+#rowFooterData { 
+  font-weight: bold;
+  background-color: #005b96;
+  color: #cea949;
+}
+
+#split {
+  font-weight: bold;
+  background-color: #eae9e9;
+  color: #000000;
+  height:0.5%;
+}
+
+.list-group-item {
+  background: #03396c;
+  padding: 10px 10px;
+  border: 1px solid #b3cde0;
+  border-radius: 25px;
+  color: #cea949;
+  margin-bottom: 5px;
+}
+
+.list-group-item:hover {
+  background: #b6bddb;
+  padding: 10px 10px;
+  color: #000000;
+  border: 1px solid #b3cde0;
+}
+
+.input-group-addon {
+  background: #cea949;
+  color: #00488d;
+}
+
+.table .table-light {
+  background-color: #eae9e9;
+  color: #2b2a2a;
+}
+
+.registration {
+  color: #000000;
+  padding: 10px 20px;
+  margin-bottom: 20px;
+}
+
+.login {
+  color: #000000;
+  padding: 10px 20px;
+  margin-bottom: 20px;
+}
+
+.logout {
+  color: #000000;
+  padding: 10px 20px;
+  margin-bottom: 20px;
+}
+
+.password-manage {
+  color: #000000;
+  padding: 10px 20px;
+  margin-bottom: 20px;
+}
+
+.registration-manage {
+  color: #000000;
+  padding: 10px 20px;
+  margin-bottom: 20px;
+}
+
+.form-text {
+  background-color: rgba(234,233,233,0.7)
+}
+
+.suggestion {
+  color: #000000;
+}
+
+.link {
+  color: #00488d;
+}
+
+.link:hover {
+  color: #605caa;
+}
+
+#table_link {
+  color: #9acd32;
+  text-shadow: 1px 1px #000000;
+}
+
+#subscription {
+  background: #6497b1;
+  border: 3px solid #000000;
+  border-style: dashed;
+}
+
+#specialtabs {
+  background-color: #b6bddb; 
+  color: #24386d; 
+  font-weight: bold;
+}
+
+#specialtabs:hover {
+  background-color: #cea949; 
+  color: #2b2a2a; 
+  font-weight: bold;
+}
+
+#specialtabs:active {
+  background-color: #67809d; 
+  color: #24386d; 
+  font-weight: bold;
+  border: 1px solid #b3cde0;
+}

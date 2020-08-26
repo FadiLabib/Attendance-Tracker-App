@@ -1,0 +1,154 @@
+{% extends "attendance_tracker/loggedin_base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+	<div>
+		<h1 class="border-bottom mb-4">{{ object.event_day }} {{ object.event_sect }} - {{ object.event_type }}</h1>
+		<div class="d-flex justify-content-between">
+			<div><h4>{{ object.event_date }}</h4></div>
+			<div>
+				<h4><a id="clrfilter" class="btn btn-info" role="button" aria-pressed="true" href="{% url 'u-event-view' object.event_id %}"><i class="fa fa-refresh" aria-hidden="true"></i>&nbsp; Reset to Default</a>
+				<a class="btn btn-info" role="button" aria-pressed="true" href="{% url 'u-event-list' %}"><i class="fa fa-caret-square-o-left" aria-hidden="true"></i>&nbsp; Back</a></h4>
+			</div>
+		</div>
+		<br>
+		<div>
+			{%  if object.user == None %}
+				<h4>Last Modified By: Unknown</h4>
+			{% else %}
+				<h4>Last Modified By: {{ object.user.first_name }} {{ object.user.last_name }}</h4>		
+			{% endif %}
+		</div>
+		<br>
+		<div>
+			<table id = "detailview" class="table table-bordered table-light dt-responsive nowrap" style="width:100%;">
+				<thead>
+					<tr>
+						<th scope="col">#</th>
+						<th scope="col">First</th>
+						<th scope="col">Last</th>
+						<th scope="col">Gr</th>
+						<th scope="col">Date of Birth</th>
+						<th scope="col">Status</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for record in event_student_list %}
+						<tr>
+							<td scope="row">{{ forloop.counter }}</td>
+							<td scope="row">{{ record.student_idn.student.first_name }}</td>
+							<td scope="row">{{ record.student_idn.student.last_name }}</td>
+							<td scope="row">{{ record.student_idn.grade }}</td>
+							<td scope="row">{{ record.student_idn.student.dob|date:"Y/m/d" }}</td>
+							<td scope="row" style="text-align: center; vertical-align: middle;">
+								{% if record.present == True %}
+									<div class="border border-dark bg-success text-white font-weight-bold"><i class="fa fa-check" aria-hidden="true"></i>&nbsp; PRES</div>
+								{% else %}
+									<div class="border border-dark bg-danger text-white font-weight-bold"><i class="fa fa-times" aria-hidden="true"></i>&nbsp; ABSNT</div>
+								{% endif %}
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+				<tfoot>
+					<tr>
+						<th scope="col" style="text-align: center;">#</th>
+						<th scope="col" style="text-align: center;">First</th>
+						<th scope="col" style="text-align: center;">Last</th>
+						<th scope="col" style="text-align: center;">Gr</th>
+						<th scope="col" style="text-align: center;">Date of Birth</th>
+						<th scope="col" style="text-align: center;">Status</th>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+		<br>
+		<div>
+			{% if object.assignees.all %}
+				<h4> Assigned To: </h4>
+				<table class="table table-bordered table-light dt-responsive nowrap" style="width:100%;">
+					<thead>
+						<th scope="col">#</th>
+						<th scope="col">First</th>
+						<th scope="col">Last</th>
+						<th scope="col">Email</th>
+						<th scope="col">Date Assigned</th>
+					</thead>
+					<tbody>
+						{% for assignee in object.assignees.all %}
+							<tr>
+								<td scope="row">{{ forloop.counter }}</td>
+								<td scope="row">{{ assignee.first_name }}</td>
+								<td scope="row">{{ assignee.last_name }}</td>
+								<td scope="row">{{ assignee.email }}</td>
+								<td scope="row">{{ object.assigned_date|date:"Y/m/d" }}</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			{% else %}
+				<h4>Assigned To: </h4>
+				<table class="table table-bordered table-light dt-responsive nowrap" style="width:100%;">
+					<thead>
+						<th scope="col">#</th>
+						<th scope="col">First</th>
+						<th scope="col">Last</th>
+						<th scope="col">Email</th>
+						<th scope="col">Date Assigned</th>
+					</thead>
+					<tbody>
+						<tr>
+							<td scope="row">1</td>
+							<td scope="row">None</td>
+							<td scope="row">None</td>
+							<td scope="row">None</td>
+							<td scope="row">None</td>
+						</tr>
+					</tbody>
+				</table>
+			{% endif %}
+		</div>
+	</div>
+{% endblock content %}
+{% block scripts %}
+<script>
+$(document).ready(function() {
+
+	// Setup - add a text input to each footer cell
+    $('#detailview tfoot th').not(":eq(0)") //Exclude columns 1
+                          .each( function () {
+        var title = $('#detailview thead th').eq( $(this).index() ).text();
+        $(this).html( '<div class="input-group"><span class="input-group-addon"></span><input type="text" id="textboxsize" placeholder="Filter by '+title+'" /></div>' );
+    } );
+
+	var table = $('#detailview').DataTable({
+		stateSave: true,
+		lengthChange: true,
+		fixedHeader: true,
+		buttons: [ 'copy', 'excel', 'csv', 'pdf','print', 'colvis' ],
+		pagingType: 'full_numbers',
+		lengthMenu: [[5, 10, 25, 50, 100, -1], [5, 10, 25, 50, 100, "All"]],
+		pageLength: 10,
+	});
+
+	table.buttons().container()
+		.appendTo( '#detailview_wrapper .col-md-6:eq(0)' );
+
+	// Apply the search
+    table.columns().eq( 0 ).each( function ( colIdx ) {
+        if (colIdx == 0) return; //Do not add event handlers for these columns
+
+        $( 'input', table.column( colIdx ).footer() ).on( 'keyup change', function () {
+            table
+                .column( colIdx )
+                .search( this.value )
+                .draw();
+        });
+    });
+
+    //Gives user the option to clear all fitlers
+    $('#clrfilter').on('click', function(){
+  		$('#detailview').DataTable().state.clear();
+	});
+});
+</script>
+{% endblock scripts %}

@@ -1,0 +1,77 @@
+{% extends "attendance_tracker/loggedin_base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+	<div>
+		<h1 class="border-bottom mb-4">{{ object.event_day }} {{ object.event_sect }} - {{ object.event_type }}</h1>
+	</div>
+	<div class="d-flex justify-content-between">
+		<div><h4>{{ object.event_date }}</h4></div>
+		<div><h4><a class="btn btn-info" role="button" aria-pressed="true" href="{% url 's-event-list' %}"><i class="fa fa-caret-square-o-left" aria-hidden="true"></i>&nbsp; Back</a></h4></div>
+	</div>
+	<br>
+	<div>
+		{%  if object.user == None %}
+			<h4>Last Modified By: Unknown</h4>
+		{% else %}
+			<h4>Last Modified By: {{ object.user.first_name }} {{ object.user.last_name }}</h4>		
+		{% endif %}
+	</div>
+	<div>
+		<h4> Assignee List:
+			{% for assignee in object.assignees.all %}
+				{{ assignee.first_name }} {{ assignee.last_name }}&#59;
+			{% endfor %}
+			End
+		</h4>
+	</div>
+	<br>
+	<h5 class="text-danger"><i class="fa fa-check" aria-hidden="true"></i>&nbsp; Checked = Present</h5>
+	<form method="POST">
+		{% csrf_token %}
+		<table id="attendance" class="table table-bordered table-light">
+			<thead>
+				<tr>
+					<th scope="col">#</th>
+					<th scope="col" style="text-align: center; vertical-align: middle;"><input type="checkbox" name="all" class="selectall"/></th>
+					<th scope="col">Status</th>
+					<th scope="col">First</th>
+					<th scope="col">Last</th>
+					<th scope="col">Gr</th>
+					<th scope="col">Date of Birth</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for record in event_student_list %}
+					<tr>
+						<td scope="row">{{ forloop.counter }}</td>
+						<td scope="row" style="text-align: center; vertical-align: middle;"><input name="present" id="present" type="checkbox" value="{{ record.student_idn.student.id_num }}"></td>
+						<td scope="row" style="text-align: center; vertical-align: middle;">
+							{% if record.present == True %}
+								<div class="border border-dark bg-success text-white font-weight-bold"><i class="fa fa-check" aria-hidden="true"></i></div>
+							{% else %}
+								<div class="border border-dark bg-danger text-white font-weight-bold"><i class="fa fa-times" aria-hidden="true"></i></div>
+							{% endif %}
+						</td>
+						<td scope="row">{{ record.student_idn.student.first_name }}</td>
+						<td scope="row">{{ record.student_idn.student.last_name }}</td>
+						<td scope="row">{{ record.student_idn.grade }}</td>
+						<td scope="row">{{ record.student_idn.student.dob|date:"Y/m/d" }}</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		<button class="btn btn-success btn-block" type="submit" value="Submit"><i class="fa fa-paper-plane" aria-hidden="true"></i>&nbsp; Send</button>
+		<br>
+		</form>
+{% endblock content %}
+{% block scripts %}
+<script type="text/javascript">
+	$('.selectall').click(function() {
+    if ($(this).is(':checked')) {
+        $('div input').attr('checked', true);
+    	} else {
+        $('div input').attr('checked', false);
+    	}
+	});
+</script>
+{% endblock scripts %}

@@ -1,0 +1,64 @@
+{% extends "attendance_tracker/base.html" %}
+{% block extras %}
+<div class="container">
+	<!-- Content Row -->
+    <div class="row">
+    	<!-- Sidebar Column -->
+    	<div class="col-lg-3 mb-4">
+    		<div class="list-group">
+    			{% if user.is_none %}
+                    <br>
+    				<a href="{% url 'class-list' %}" class="list-group-item">&nbsp;<i class="fa fa-child fa-lg" aria-hidden="true"></i>&nbsp;&nbsp; S Student View</a>
+    				<a class="btn btn-success" href="#" role="button">Purchase or Renew License</a>
+                    <br>
+    			{% elif user.is_standard %}
+                    <br>
+    				<a href="{% url 'class-list' %}" class="list-group-item">&nbsp;<i class="fa fa-child fa-lg" aria-hidden="true"></i>&nbsp;&nbsp; S Student View</a></li>
+    				<a href="{% url 's-event-create' %}" class="list-group-item">&nbsp;<i class="fa fa-calendar-plus-o fa-lg" aria-hidden="true"></i>&nbsp;&nbsp; S Create Event</a></li>
+    				<a href="{% url 's-event-list' %}" class="list-group-item">&nbsp;<i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>&nbsp;&nbsp; S Manage All Events Attendance</a>
+    				<a href="{% url 's-events-by-user' user.email %}" class="list-group-item">&nbsp;<i class="fa fa-user fa-lg" aria-hidden="true"></i>&nbsp;&nbsp; S Mange My Events Attendance</a>
+                    <br>
+    			{% elif user.is_professional %}
+                    <br>
+    				<a href="{% url 'class-list' %}" class="list-group-item">&nbsp;<i class="fa fa-child fa-lg" aria-hidden="true"></i>&nbsp;&nbsp; P Student View</a>
+    				<a href="#" class="list-group-item">&nbsp;<i class="fa fa-calendar-plus-o fa-lg" aria-hidden="true"></i>&nbsp;&nbsp; P Create Event</a>
+    				<a href="#" class="list-group-item">&nbsp;<i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>&nbsp;&nbsp; P Manage All Events Attendance</a>
+    				<a href="#" class="list-group-item">&nbsp;<i class="fa fa-user fa-lg" aria-hidden="true"></i>&nbsp;&nbsp; P Mange My Events Attendance</a>
+    				<a href="#" class="list-group-item">&nbsp;<i class="fa fa-bell fa-lg" aria-hidden="true"></i>&nbsp;&nbsp; P Reminder</a>
+    				<a href="#" class="list-group-item">&nbsp;<i class="fa fa-bar-chart fa-lg" aria-hidden="true"></i>&nbsp;&nbsp; P Analytics</a>
+                    <br>
+    			{% elif user.is_ultimate %}
+                    <br>
+    				<a href="{% url 'exp-list' %}" class="list-group-item">&nbsp;<i class="fa fa-child fa-lg" aria-hidden="true"></i>&nbsp;&nbsp; U Student View</a>
+    				<a href="{% url 'u-event-create' %}" class="list-group-item">&nbsp;<i class="fa fa-calendar-plus-o fa-lg" aria-hidden="true"></i>&nbsp;&nbsp; U Create Event</a>
+    				<a href="{% url 'u-event-list' %}" class="list-group-item">&nbsp;<i class="fa fa-pencil-square fa-lg" aria-hidden="true"></i>&nbsp;&nbsp; U Manage All Events Attendance</a>
+    				<a href="{% url 'u-events-by-user' user.email %}" class="list-group-item">&nbsp;<i class="fa fa-user fa-lg" aria-hidden="true"></i>&nbsp;&nbsp; U Mange My Events Attendance</a>
+    				<a href="#" class="list-group-item">&nbsp;<i class="fa fa-bell fa-lg" aria-hidden="true"></i>&nbsp;&nbsp; U Reminder</a>
+    				<a href="#" class="list-group-item">&nbsp;<i class="fa fa-bar-chart fa-lg" aria-hidden="true"></i>&nbsp;&nbsp; U Analytics</a>
+                    <a href="#" class="list-group-item">&nbsp;<i class="fa fa-suitcase fa-lg" aria-hidden="true"></i>&nbsp;&nbsp; U Mange Event Assignment</a>
+    				<a href="#" class="list-group-item">&nbsp;<i class="fa fa-lock fa-lg" aria-hidden="true"></i>&nbsp;&nbsp; U Admin</a>
+                    <br>
+    			{% endif %}
+    		</div>
+        </div>
+    	<!-- Content Column -->
+    	<div class="col-lg-9 mb-4">
+    		{% if messages %}
+				{% for message in messages %}
+					<div class="alert alert-{{ message.tags }}">
+						{{ message }}
+					</div>
+				{% endfor %}
+			{% endif %}
+			{% block content %}{% endblock %}
+    	</div>
+    </div>
+</div>
+<!-- Footer -->
+<footer class="py-5 bg-dark">
+    <div class="container">
+        <p class="m-0 text-center text-white">Copyright &copy; Attendance Tracker 2020</p>
+    </div>
+    <!-- /.container -->
+</footer>
+{% endblock extras %}

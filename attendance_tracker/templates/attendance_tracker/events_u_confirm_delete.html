@@ -1,0 +1,32 @@
+{% extends "attendance_tracker/loggedin_base.html" %}
+{% block content %}
+	<div>
+		<form method="POST">
+			{% csrf_token %}
+			<fieldset class="form-group">
+				<h1 class="border-bottom mb-4">Delete Event</h1>
+				<h2 style="color: #233e80;">Are you sure you want to delete this event?</h2>
+				<br>
+				<h3 style="border-style: solid; border-color: #eae9e9; background-color:#00488d; color: #b3cde0;">Event Details:</h3>
+				<div class="d-flex justify-content-between">
+					<div><h4 style="color: #605caa; text-shadow: 1px 1px #24386d;">Date:</h4></div>
+					<div><h4 style="color: #cea949; text-shadow: 1px 1px #24386d;">{{ object.event_date }}</h4></div>
+				</div>
+				<div class="d-flex justify-content-between">
+					<div><h4 style="color: #605caa; text-shadow: 1px 1px #24386d;">Title:</h4></div>
+					<div><h4 style="color: #cea949; text-shadow: 1px 1px #24386d;">{{ object.event_day }} {{ object.event_sect }} - {{ object.event_type }}</h4></div>
+				</div>
+				<br>
+				<p class="text-danger font-weight-bold font-italic">WARNING: Deleted events are not recoverable - This includes student's attendance records for this events</p>
+			</fieldset>
+			<div class="border-top pt-3 d-flex justify-content-between">
+				<div class="form-group">
+					<button class="btn btn-danger btn-block" type="submit">Yes! Delete Event</button>
+				</div>
+				<div class="form-group">
+					<a class="btn btn-secondary btn-block" href="{% url 'u-event-list' %}">Cancel</a>
+				</div>
+			</div>
+		</form>
+	</div>
+{% endblock content %}

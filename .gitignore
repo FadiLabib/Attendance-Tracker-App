@@ -1,0 +1,7 @@
+__pycache__/
+/fadis_apps
+data.py
+manage.py
+rawdata.txt
+/UAM
+/attendance_tracker/migrations
