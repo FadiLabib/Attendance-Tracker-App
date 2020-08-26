@@ -1,0 +1,45 @@
+{% extends "attendance_tracker/loggedin_base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+	<div>
+		<h2 class="account-heading">{{ user.first_name }} {{ user.last_name }}</h2>
+		<div class="border-top pt-3 d-flex justify-content-between">
+			<h4 class="text-secondary">{{ user.email }}</h4>
+			<h4><a class="btn btn-primary" href="{% url 'password_change' %}"><i class="fa fa-wrench" aria-hidden="true"></i>&nbsp; Change Password</a></h4>
+		</div>
+		<br>
+		<legend class="border-bottom mb-4">Profile Information</legend>
+		{% crispy u_form u_form.helper %}
+		<br>
+		<fieldset>
+			<legend class="border-bottom mb-4">Subscription Information</legend>
+			<div class="col-12 col-md-12">
+				<div id="subscription" class="card h-100">
+					<h3 class="card-header text-center">{{ user.license }}</h3>
+					<div class="card-body">
+            			{% if user.license == 'NoLi' %}
+            				<div class="font-italic text-center">License Expired On: </div>
+            				<div class="display-4"><h4 class="text-center">{{ subscription.expired.date }}</h4></div>
+            				<div class="align-middle"><a class="btn btn-success btn-block" href="#" role="button">Purchase</a></div>
+            			{% else %}
+            				<div class="font-italic text-center">Expires In: </div>
+							<div class="display-4">
+            					<div id="license" class="text-center">
+            						<p id="clock-countdown" class="countdown"></p>
+								</div>
+            				</div>
+            				<div class="align-middle"><a class="btn btn-info btn-block" href="#" role="button">Change License</a></div>
+            			{% endif %}
+          			</div>
+        		</div>
+        	</div>
+		</fieldset>
+	</div>
+{% endblock content %}
+{% block scripts %}
+<script type="text/javascript">
+	$('#license').countdown('{{ subscription.expired.date|date:"Y/m/d" }}', function(event) {
+		$('#clock-countdown').html(event.strftime('<h4>%m months and %n days</h4>'));
+	});
+</script>
+{% endblock scripts %}

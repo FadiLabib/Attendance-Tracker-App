@@ -1,0 +1,23 @@
+{% extends "attendance_tracker/neutral_base.html" %}
+{% block content %}
+	<div class="registration-manage col-8 mx-auto">
+		<legend class="border-bottom mb-4">Registration Closed</legend>
+		<div style="text-align:center">
+			<h3><a class="mr-4" href="{% url 'attendance-home' %}">Attendance Tracker</a></h3>
+		</div>
+		<br>
+		<div class="alert alert-danger">
+			Registration Window Closed! 		
+		</div>
+		<P>We are not accepting registraitons at this time. Please try again later.</p>
+		<br>
+		<div class="border-top pt-3 d-flex justify-content-between">
+			<div class="suggestion">
+				Home Page? <a class="link ml-3" href="{% url 'attendance-home' %}">Home</a>
+			</div>
+			<div class="suggestion">
+				Sign In? <a class="link ml-3" href="{% url 'login' %}">Login</a>
+			</div>
+		</div>
+	</div>
+{% endblock content %}

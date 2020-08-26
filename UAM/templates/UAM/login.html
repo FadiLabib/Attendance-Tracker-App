@@ -1,0 +1,21 @@
+{% extends "attendance_tracker/neutral_base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+	<div class="login col-8 mx-auto">
+		<legend class="border-bottom mb-4">Log In</legend>
+		<div style="text-align:center">
+			<h3><a class="mr-4" href="{% url 'attendance-home' %}">Attendance Tracker</a></h3>
+		</div>
+		<br>
+		{% crispy form form.helper %}
+		<br>
+		<div class="border-top pt-3 d-flex justify-content-between">
+			<div class="suggestion">
+				Need An Account? <a class="link ml-3" href="{% url 'django_registration_register' %}">Create Account</a>
+			</div>
+			<div class="suggestion">
+				Forgot Password? <a class="link ml-3" href="{% url 'password_reset' %}">Password Reset</a>
+			</div>
+		</div>
+	</div>
+{% endblock content %}

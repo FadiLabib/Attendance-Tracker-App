@@ -1,0 +1,20 @@
+{% extends "attendance_tracker/neutral_base.html" %}
+{% block content %}
+	<div class="registration-manage col-8 mx-auto">
+		<legend class="border-bottom mb-4">Registration Completed</legend>
+		<div style="text-align:center">
+			<h3><a class="mr-4" href="{% url 'attendance-home' %}">Attendance Tracker</a></h3>
+		</div>
+		<br>
+		<div class="alert alert-info">
+			Registration Completed - Activate Account Email Sent!
+		</div>
+		<P>You are now registered. We have sent you an email with instructions to activate your account. You should receive it shortly. If you didn't receive an email, please make sure you've entered the email address correctly duirng registration or check your spam folder.</P>
+		<br>
+		<div class="border-top pt-3">
+			<p class="suggestion">
+				Like to Try Again? <a class="link ml-3" href="{% url 'django_registration_register' %}">Register</a>
+			</p>
+		</div>
+	</div>
+{% endblock content %}

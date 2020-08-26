@@ -1,5 +1,6 @@
 __pycache__/
 /fadis_apps
 rawdata.txt
-/UAM
+/UAM/__pycache__
+/UAM/signals.py
 

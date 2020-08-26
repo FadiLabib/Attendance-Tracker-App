@@ -1,0 +1,18 @@
+{% extends "attendance_tracker/neutral_base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+	<div class="registration col-8 mx-auto">
+		<legend class="border-bottom mb-4">Create Account</legend>
+		<div style="text-align:center">
+			<h3><a class="mr-4" href="{% url 'attendance-home' %}">Attendance Tracker</a></h3>
+		</div>
+		<br>
+		{% crispy form form.helper %}
+		<br>
+		<div class="border-top pt-3">
+			<p class="suggestion">
+				Already Created An Account? <a class="link ml-3" href="{% url 'login' %}">Sign In</a>
+			</p>
+		</div>
+	</div>
+{% endblock content %}

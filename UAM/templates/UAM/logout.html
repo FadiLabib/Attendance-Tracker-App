@@ -1,0 +1,17 @@
+{% extends "attendance_tracker/neutral_base.html" %}
+{% block content %}
+	<div class="logout col-8 mx-auto">
+		<legend class="border-bottom mb-4">Logged Out</legend>
+		<div style="text-align:center">
+			<h3><a class="mr-4" href="{% url 'attendance-home' %}">Attendance Tracker</a></h3>
+			<br>
+			<P>You are successfully logged out. You may close your browser now.</P>
+		</div>
+		<br>
+		<div class="border-top pt-3">
+			<p class="suggestion">
+				Need to Login Again? <a class="link ml-3" href="{% url 'login' %}">Login</a>
+			</p>
+		</div>
+	</div>
+{% endblock content %}

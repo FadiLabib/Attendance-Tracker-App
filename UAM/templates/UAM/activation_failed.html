@@ -1,0 +1,38 @@
+{% extends "attendance_tracker/neutral_base.html" %}
+{% block content %}
+	<div class="password-manage col-8 mx-auto">
+		<legend class="border-bottom mb-4">Account Activation Failed</legend>
+		<div style="text-align:center">
+			<h3><a class="mr-4" href="{% url 'attendance-home' %}">Attendance Tracker</a></h3>
+		</div>
+		<br>
+		<div class="alert alert-danger">
+			Can't Activate Account		
+		</div>
+		{% if activation_error.code == 'already_activated' %}
+			<h5>Already Activated</h5>
+			<p> {{ activation_error.message }} </p>
+		{% endif %}
+		{% if activation_error.code == 'bad_username' %}
+			<h5>User Account Doesn't Exist</h5>
+			<p> {{ activation_error.message }} </p>
+		{% endif %}
+		{% if activation_error.code == 'expired' %}
+			<h5>Account Activation Key Expired</h5>
+			<p> {{ activation_error.message }} </p>
+		{% endif %}
+		{% if activation_error.code == 'invalid_key' %}
+			<h5>Invalid Key</h5>
+			<p> {{ activation_error.message }} </p>
+		{% endif %}
+		<br>
+		<div class="border-top pt-3 d-flex justify-content-between">
+			<div class="suggestion">
+				<p class="suggestion">Sign in? <a class="link ml-3" href="{% url 'login' %}">Sign In</a></p>
+			</div>
+			<div class="suggestion">
+				Register Again? <a class="link ml-3" href="{% url 'django_registration_register' %}">Create Account</a>
+			</div>
+		</div>
+	</div>
+{% endblock content %}
